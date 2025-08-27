@@ -1,0 +1,27 @@
+stages:
+  preprocess:
+    cmd: python src/data_pipeline.py data/raw/train.csv data/processed/train.parquet
+    deps:
+      - src/data_pipeline.py
+      - data/raw/train.csv
+    outs:
+      - data/processed/train.parquet
+
+  split:
+    cmd: python src/split.py data/processed/train.parquet data/processed/train_train.parquet data/processed/train_val.parquet
+    deps:
+      - src/split.py
+      - data/processed/train.parquet
+    outs:
+      - data/processed/train_train.parquet
+      - data/processed/train_val.parquet
+
+  train:
+    cmd: python src/train.py --train data/processed/train_train.parquet --val data/processed/train_val.parquet --params params.yaml
+    deps:
+      - src/train.py
+      - params.yaml
+      - data/processed/train_train.parquet
+      - data/processed/train_val.parquet
+    outs:
+      - mlruns/  # this is optional, DVC will track that mlflow artifacts were created locally (you can omit if you prefer)
