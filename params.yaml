@@ -1,0 +1,9 @@
+train:
+  seed: 42
+  numTrees: [100, 300]
+  maxDepth: [5, 8, 12]
+  maxBins: 32
+  cv_folds: 5
+  parallelism: 2
+  experiment_name: "TitanicExperiment"
+  registered_model_name: "TitanicRF"
